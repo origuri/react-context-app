@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Products from "./Products";
 import Options from "./Options";
 import ErrorBanner from "./ErrorBanner";
+import { OrderContext } from "../context/OrderContext";
 
 interface TypeProps {
   orderType: string;
@@ -18,6 +19,10 @@ const Type = ({ orderType }: TypeProps) => {
   const [items, setItems] = useState<IItems[]>([]);
   // fetch할 때 에러를 발견하면 배너를 띄위기 위함.
   const [errors, setErrors] = useState(false);
+
+  const [orderData, updateItemCount] = useContext(OrderContext);
+  console.log("타입 orderData-> ", orderData);
+  console.log("타입 updateItemCount-> ", updateItemCount);
 
   useEffect(() => {
     loadItems(orderType);
@@ -52,6 +57,9 @@ const Type = ({ orderType }: TypeProps) => {
       key={item.name}
       name={item.name}
       imagePath={item.imagePath}
+      updateItemCount={(itemName: string, newItemCount: number) =>
+        updateItemCount(itemName, newItemCount, orderType)
+      }
     />
   ));
 
